@@ -107,6 +107,53 @@ export type Database = {
         }
         Relationships: []
       }
+      face_signatures: {
+        Row: {
+          id: string
+          user_id: string
+          faceio_face_id: string | null
+          signature_hash: string
+          registration_timestamp: string | null
+          last_used: string | null
+          is_active: boolean | null
+          metadata: Json | null
+          created_at: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          faceio_face_id?: string | null
+          signature_hash: string
+          registration_timestamp?: string | null
+          last_used?: string | null
+          is_active?: boolean | null
+          metadata?: Json | null
+          created_at?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          id?: string
+          user_id?: string
+          faceio_face_id?: string | null
+          signature_hash?: string
+          registration_timestamp?: string | null
+          last_used?: string | null
+          is_active?: boolean | null
+          metadata?: Json | null
+          created_at?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "face_signatures_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -114,6 +161,8 @@ export type Database = {
           full_name: string | null
           id: string
           is_admin: boolean | null
+          face_registered: boolean | null
+          face_signature_id: string | null
         }
         Insert: {
           avatar_url?: string | null
@@ -121,6 +170,8 @@ export type Database = {
           full_name?: string | null
           id: string
           is_admin?: boolean | null
+          face_registered?: boolean | null
+          face_signature_id?: string | null
         }
         Update: {
           avatar_url?: string | null
@@ -128,8 +179,18 @@ export type Database = {
           full_name?: string | null
           id?: string
           is_admin?: boolean | null
+          face_registered?: boolean | null
+          face_signature_id?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "profiles_face_signature_id_fkey"
+            columns: ["face_signature_id"]
+            isOneToOne: false
+            referencedRelation: "face_signatures"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       votes: {
         Row: {
