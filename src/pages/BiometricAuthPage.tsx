@@ -12,7 +12,7 @@ const BiometricAuthPage = () => {
       locale: "auto"
     }).then(userInfo => {
       alert("Authenticated: " + userInfo.details.email);
-      navigate("/ElectionsPage"); // Redirect to vote page
+      navigate("/elections"); // Fixed: Changed from "/ElectionsPage" to "/elections"
     }).catch(err => {
       alert("Authentication failed: " + err.code);
       console.error(err);

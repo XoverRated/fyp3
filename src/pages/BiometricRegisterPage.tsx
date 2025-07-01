@@ -1,5 +1,3 @@
-
-
 // src/pages/BiometricRegisterPage.tsx
 import React from "react";
 import { useNavigate } from "react-router-dom";
@@ -21,7 +19,7 @@ const BiometricRegisterPage = () => {
   alert("Face Registered for: " + userInfo.details.voterId);
 
   localStorage.setItem("faceRegistered", "true");
-  navigate("/BiometricAuthPage"); // ✅ send them to verify
+  navigate("/elections");
 }).catch(err => {
   let code = typeof err === "number" ? err : err?.code;
   alert("Registration failed. Error code: " + code);

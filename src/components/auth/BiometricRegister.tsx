@@ -145,7 +145,7 @@ export const BiometricRegister = () => {
         
         setTimeout(() => {
           setIsScanning(false);
-          navigate("/biometric-auth"); 
+          navigate("/elections");
         }, 500);
 
       } else {
