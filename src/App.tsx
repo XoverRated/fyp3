@@ -1,67 +1,127 @@
+import React, { useState } from 'react';
+import { Web3Provider } from './contexts/Web3Context';
+import VotingDashboard from './components/VotingDashboard';
+import AdminPanel from './components/AdminPanel';
+import { Button } from './components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './components/ui/card';
+import { Badge } from './components/ui/badge';
+import { Vote, Settings, Shield, Blocks } from 'lucide-react';
+import { Toaster } from 'sonner';
+import './App.css';
 
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { Toaster } from "@/components/ui/toaster";
-import Index from "@/pages/Index";
-import BiometricRegisterPage from "@/pages/BiometricRegisterPage";
-import BiometricAuthPage from "@/pages/BiometricAuthPage";
+function App() {
+  const [activeView, setActiveView] = useState<'voting' | 'admin'>('voting');
 
-import AuthPage from "@/pages/AuthPage";
-import ElectionsPage from "@/pages/ElectionsPage";
-import ElectionDetailPage from "@/pages/ElectionDetailPage";
-import VoteConfirmationPage from "@/pages/VoteConfirmationPage";
-import VerifyPage from "@/pages/VerifyPage";
-import HowItWorksPage from "@/pages/HowItWorksPage";
-import FAQPage from "@/pages/FAQPage";
-import PrivacyPolicyPage from "@/pages/PrivacyPolicyPage";
-import TermsOfServicePage from "@/pages/TermsOfServicePage";
-import SecurityInfoPage from "@/pages/SecurityInfoPage";
-import ContactPage from "@/pages/ContactPage";
-import ProfilePage from "@/pages/ProfilePage";
-import SettingsPage from "@/pages/SettingsPage";
-import AboutUsPage from "@/pages/AboutUsPage";
-import AdminDashboardPage from "@/pages/AdminDashboardPage"; // New
-import NotFound from "@/pages/NotFound";
-import { AuthProvider } from "@/contexts/AuthContext";
-import { ProtectedRoute } from "@/components/auth/ProtectedRoute"; // Assuming you have this
-import { AdminRoute } from "@/components/auth/AdminRoute"; // New
-
-
-const App = () => {
   return (
-    <AuthProvider>
-      <Router>
-        <Routes>
+    <Web3Provider>
+      <div className="min-h-screen bg-background">
+        {/* Header */}
+        <header className="border-b bg-card">
+          <div className="container mx-auto px-6 py-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="flex items-center gap-2">
+                  <Blocks className="w-8 h-8 text-primary" />
+                  <div>
+                    <h1 className="text-xl font-bold">BlockVote</h1>
+                    <p className="text-xs text-muted-foreground">Decentralized Voting Platform</p>
+                  </div>
+                </div>
+                <Badge variant="outline" className="ml-4">
+                  Powered by Ethereum
+                </Badge>
+              </div>
 
-          <Route path="/" element={<Index />} />
-          <Route path="/auth" element={<AuthPage />} />
-          
-          
-          <Route path="/biometric-register" element={<ProtectedRoute><BiometricRegisterPage /></ProtectedRoute>} />
-          <Route path="/biometric-auth" element={<ProtectedRoute><BiometricAuthPage/></ProtectedRoute> } />
-          <Route path="/elections" element={<ProtectedRoute><ElectionsPage /></ProtectedRoute>} />
-          <Route path="/elections/:id" element={<ProtectedRoute><ElectionDetailPage /></ProtectedRoute>} />
-          <Route path="/vote-confirmation" element={<ProtectedRoute><VoteConfirmationPage /></ProtectedRoute>} />
-          <Route path="/profile" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
-          <Route path="/settings" element={<ProtectedRoute><SettingsPage /></ProtectedRoute>} />
+              <nav className="flex items-center gap-2">
+                <Button
+                  variant={activeView === 'voting' ? 'default' : 'ghost'}
+                  size="sm"
+                  onClick={() => setActiveView('voting')}
+                  className="flex items-center gap-2"
+                >
+                  <Vote className="w-4 h-4" />
+                  Voting
+                </Button>
+                <Button
+                  variant={activeView === 'admin' ? 'default' : 'ghost'}
+                  size="sm"
+                  onClick={() => setActiveView('admin')}
+                  className="flex items-center gap-2"
+                >
+                  <Shield className="w-4 h-4" />
+                  Admin
+                </Button>
+              </nav>
+            </div>
+          </div>
+        </header>
 
-          {/* Admin Route */}
-          <Route path="/admin" element={<AdminRoute><AdminDashboardPage /></AdminRoute>} />
+        {/* Main Content */}
+        <main className="flex-1">
+          {activeView === 'voting' ? <VotingDashboard /> : <AdminPanel />}
+        </main>
 
-          <Route path="/verify" element={<VerifyPage />} />
-          <Route path="/how-it-works" element={<HowItWorksPage />} />
-          <Route path="/faq" element={<FAQPage />} />
-          <Route path="/privacy" element={<PrivacyPolicyPage />} />
-          <Route path="/terms" element={<TermsOfServicePage />} />
-          <Route path="/security" element={<SecurityInfoPage />} />
-          <Route path="/contact" element={<ContactPage />} />
-          <Route path="/about-us" element={<AboutUsPage />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-        <Toaster />
-      </Router>
-    </AuthProvider>
+        {/* Footer */}
+        <footer className="border-t bg-muted/50 py-6">
+          <div className="container mx-auto px-6">
+            <div className="grid gap-6 md:grid-cols-3">
+              <Card>
+                <CardHeader className="pb-3">
+                  <CardTitle className="text-sm flex items-center gap-2">
+                    <Shield className="w-4 h-4" />
+                    Secure & Transparent
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <CardDescription className="text-xs">
+                    All votes are cryptographically secured and permanently recorded on the Ethereum blockchain for complete transparency.
+                  </CardDescription>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader className="pb-3">
+                  <CardTitle className="text-sm flex items-center gap-2">
+                    <Vote className="w-4 h-4" />
+                    MetaMask Integration
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <CardDescription className="text-xs">
+                    Connect your MetaMask wallet to securely authenticate and cast your votes on the blockchain.
+                  </CardDescription>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader className="pb-3">
+                  <CardTitle className="text-sm flex items-center gap-2">
+                    <Settings className="w-4 h-4" />
+                    Real Blockchain
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <CardDescription className="text-xs">
+                    Built on Ethereum using Hardhat for development and real smart contracts for production deployment.
+                  </CardDescription>
+                </CardContent>
+              </Card>
+            </div>
+
+            <div className="text-center mt-6 pt-6 border-t">
+              <p className="text-xs text-muted-foreground">
+                BlockVote - Decentralized Voting Platform • Built with React, TypeScript, Ethereum & MetaMask
+              </p>
+            </div>
+          </div>
+        </footer>
+
+        {/* Toast Notifications */}
+        <Toaster richColors position="top-right" />
+      </div>
+    </Web3Provider>
   );
-};
+}
 
 export default App;
 
